@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>DG Score</title>
+
+
+
+	<!-- jQuery 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />-->
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+	<!-- local -->
+	<link rel="stylesheet" href="dgscore-main.css" />
+	<script src="dgscore-main.js"></script>	
+
+	</head>
+
+	<body>
+
+
+		<div data-role="page" id="title">
+			<div role="main" class="ui-content">
+					<h2>DG Score</h2>
+
+					<p class="centered hide" id="lastRound"><span class="label">Last Round:</span> <span data-var="lastRoundPlayed"></span></p>
+
+					<div class="button-container">
+						<p id="viewScorecard" class="hide"><button data-action="scoreCard" class="outline">View Scorecard</button></p>
+
+						<p id="resume-round"><button data-action="resumeRound">Resume Round</button></p>
+
+						<p><button data-action="newRound">Start New Round</button></p>
+					</div>
+
+
+			</div>
+
+		</div>
+
+
+		<div data-role="page" id="new-round">
+			<div data-role="header">
+				<h2>New Round</h2>
+			</div>
+			<div role="main" class="ui-content">
+					<div class="select-players">
+						<h3>Players:</h3>
+						<ol class="player-list" data-var="playerList"></ol>
+						<p><button class="outline" data-action="showSavedPlayers">Add Player</button></p>
+					</div>
+					<hr>
+					<div class="select-course">
+						<h3>Course:</h3>
+						<div class="selected-course"></div>
+							<p><button class="outline" data-action="getSavedCourses">Select Course</button></p>
+						
+					</div>
+					<hr>
+					<div class="button-container">
+						<button data-action="titlePage" class="outline">Cancel</button>
+						<button data-action="startRound" id="startRound_btn">Start Round</button>
+						
+					</div>
+			</div>
+		</div>
+
+
+		<div data-role="page" id="edit-player" data-id="0" >
+			<div data-role="header">
+				<h3>Edit Player</h3>
+			</div>
+			<form role="main" class="ui-content">
+				<div class="player-picture"></div>
+				<div class="left">
+					<p><input type="text" class="player-name" placeholder="Player Name"></p>
+					<p><input type="text" class="player-uid" placeholder="Account ID"></p>
+				</div>
+				<div class="button-container clear">
+					<button class="outline cancel">Cancel</button>
+					<button class="outline remove">Remove</button>
+					<button class="save">Save</button>
+				</div>
+			</form>
+		</div>
+
+
+		<div data-role="page" id="select-player" >
+			<div data-role="header">
+				<h3>Select Player</h3>
+			</div>
+			<form role="main" class="ui-content">
+				<ol class="saved-player-list" data-role="listview"></ol>
+			</form>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#" data-action="newRound">CANCEL</a></li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+
+
+		<div data-role="page" id="select-course" >
+			<div data-role="header">
+				<h3>Select Course</h3>
+			</div>
+			<form role="main" class="ui-content">
+				<ol class="saved-course-list" data-role="listview"></ol>
+			</form>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#" data-action="newRound">CANCEL</a></li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+
+
+		<div data-role="page" id="recent-courses" >
+			<div data-role="header">
+				<h3>Select Course</h3>
+			</div>
+
+			<form role="main" class="ui-content">
+				<h3>Recently Played</h3>
+				<ol class="saved-course-list" data-role="listview"></ol>
+			</form>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#" data-action="newRound">CANCEL</a></li>
+						<li><a href="#" data-action="getNearbyCourses">Show Nearby</a></li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+
+		<div data-role="page" id="nearby-courses" >
+			<div data-role="header">
+				<h3>Select Course</h3>
+			</div>
+
+			<form role="main" class="ui-content">
+				<h3>Courses Near You</h3>
+				<ol class="saved-course-list" data-role="listview"></ol>
+			</form>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#" data-action="newRound">CANCEL</a></li>
+						<li><a href="#" data-action="getSavedCourses">Show Recently Played</a></li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+
+
+		<div data-role="page" id="hole-0">
+			<div data-role="header" class="header-round-score">
+					<button class=" ui-btn ui-btn-left prevHole" data-action="prevHole"><</button>
+					<div class="info">
+						<p data-var="courseName" class="course-name">Untitled Course</p>
+						<h3 data-var="holeNumber">Hole 0</h3>
+						<p data-var="holeInfo"></p>
+					</div>
+					<button class=" ui-btn ui-btn-right nextHole" data-action="nextHole">></button>
+			</div>
+
+			<div role="main" class="ui-content">
+				<ul data-role="listview" class="player-cards">
+					<li class="player-card" id="playerCardTemplate">
+						<div class="label-bar">
+							<div class="player-label" data-var="playerName">Player 1</div>
+							<div class="round-score-label">Current Score</div>
+							<div data-var="playerRoundScore" class="round-score-value"></div>
+							<div data-var="playerRoundPar" class="round-par-value"></div>
+						</div>
+						<div class="player-grid">
+							<div class="player-picture"></div>
+							<div class="strokes">
+								<div class="strokes-label">Strokes</div>
+								<button class="minus" data-action="subStroke">-</button>
+								<div class="stroke-value" data-var="strokes">3</div>
+								<button  class="plus" data-action="addStroke">+</button>
+							</div>
+						</div>
+						<div class="extras-bar"></div>
+						<div class="score-chart"></div>
+					</li>
+
+				</ul>
+			</div>
+
+			<div data-role="footer" class="footer-round-score"  data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#" data-action="title">MAIN</a></li>
+						<li><a href="#" data-action="scoreCard">SCORE CARD</a></li>
+						<li><a href="#" data-action="endRound">END ROUND</a></li>
+					</ul>
+
+				</div>
+			</div>			
+
+		</div>
+
+
+		<div data-role="page" id="score-card" >
+			<div data-role="header">
+				<h3>Score Card</h3>
+			</div>
+			<ul id="scoreChartList">
+				<li class="score-chart-header">
+				</li>
+				<li class="row">
+					<div class="score-chart"></div>
+				</li>
+			</ul>
+
+			<div class="centered" id="scorecardReturn">
+				<button class="RETURN" data-action="currentHole">RETURN</button>
+			</div>
+
+			<div data-role="footer" class="footer-round-score"  data-position="fixed">
+				<div data-role="navbar">
+					<ul><li><a href="#" data-action="title">MAIN</a></li>
+						<li><a href="#" data-action="currentHole">RETURN</a></li>
+						<li><a href="#" data-action="endRound">END ROUND</a></li>
+					</ul>
+
+				</div>
+			</div>		
+		</div>
+
+
+		<div class="modal">
+			<div class="inner">
+				<div class="header">Header</div>
+				<div class="content">Modal content</div>
+			</div>
+		</div>
+
+
+		<div data-role="page" id="loading" >
+
+			<div class="centered">
+				<h2>Loading Data...</h2>
+			</div>
+
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar">
+					<ul><li><a href="#" data-action="title">MAIN</a></li>
+					</ul>
+
+				</div>
+			</div>		
+		</div>
+
+
+	</body>
+
+
+</html>
